@@ -4,6 +4,7 @@
           <user-info-card />
       </div>
       <div class="container">
+        <a-divider>Notes</a-divider>
         <list class="list"/>
       </div>
     </a-layout-content>
@@ -60,8 +61,5 @@ export default {
     background-position: center;
   }
 
-  .list {
-    margin-top: 40px;
-  }
 
 </style>
