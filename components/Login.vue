@@ -1,4 +1,5 @@
 <template>
+<div class="container">
   <a-card :title="buttonTxt" :bordered="true" style="width: 300px" hoverable>
     <a-input-group>
       <a-input placeholder="User name" v-model="userName" ref="userNameInput">
@@ -20,6 +21,7 @@
       <a-button type="link" @click="register()">{{btnAction}}</a-button>
     </div>
   </a-card>
+</div>
 </template>
 
 <script>
@@ -28,8 +30,8 @@
     data() {
       return {
         haveAccount: true,
-        userName: "",
-        password: "",
+        userName: "slmkitani@gmail.com",
+        password: "x123456789",
         confermedPassword : "",
         buttonTxt : "Login",
         btnAction: "Register",
@@ -38,6 +40,10 @@
     },
     methods: {
       login() {
+        this.$auth.loginWith('local', { data: {
+          email: this.userName,
+          password: this.password
+        } })
         this.$notification.open({
             message: `${this.buttonTxt}`,
             type:"success"
@@ -61,6 +67,13 @@
 </script>
 
 <style scoped>
+  .container {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: #eeeff0;
+  }
   .login-button {
     background-color: #34495e;
     color: white;
