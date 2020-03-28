@@ -13,7 +13,7 @@ function getName(row) {
     dataToRender: []
   });
   
-  export const mutation = {
+  export const mutations = {
     setUser(state, payload) {
       state.user.email = payload.email;
       state.notes = payload.notes;
@@ -32,16 +32,16 @@ function getName(row) {
   };
   
   export const getters = {
-    getNotes: (state) => {
+    getNotes (state) {
       return state.dataToRender;
     },
-    getName: (state) => {
+    getName (state) {
       return state.user.name;
     },
-    getEmail: (state) => {
+    getEmail (state) {
       return state.user.email;
     },
-    getCurrentFilter: (state) => {
+    getCurrentFilter (state) {
       return state.filter;
     }
   };
