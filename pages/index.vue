@@ -1,62 +1,68 @@
 <template>
-    <a-row class="container">
-      <a-col :span="12" class="left-container">
-        <login />
-      </a-col>
-      <a-col :span="12" class="right-container">
-        <h1 class="yellow-txt">WE SURVIVE TOGETHER</h1>
-        <p class="orang34495e-txt">Community that fight corona together for a better tomorrow.</p>
-      </a-col>
-    </a-row>
+<a-layout id="components-layout-demo-top-side">
+    <a-layout-header class="header">
+      <div class="logo" />
+      <a-menu
+        theme='dark'
+        mode="horizontal"
+        :defaultSelectedKeys="['1']"
+        :style="{ lineHeight: '64px' }"
+      >
+        <a-menu-item key="1">Home</a-menu-item>
+        <a-menu-item key="2">About</a-menu-item>
+      </a-menu>
+    </a-layout-header>
+    <a-layout-content>
+      <div>
+        <h1>{{userEmail}}</h1>
+      </div>
+    </a-layout-content>
+</a-layout>
 </template>
 
 <script>
-import Login from '~/components/Login.vue'
-
 export default {
-  components: {
-    Login
+  middleware: 'auth',
+  data(){
+    return {
+      resp: null,
+      userEmail: "",
+      userNotes: []
+    }
+  },
+  methods:{
+  },
+  mounted(){
+    // fetch user Data :
+    this.$axios.get('/auth/user')
+    .then(res => {
+      this.userEmail = res.data.email;
+      this.userNotes = res.data.notes;
+      
+      this.$notification.open({
+        type: 'success',
+        message: `Welcome back ${this.userEmail}`,
+        description: ''
+      })
+    })
+    .catch(err => {
+      this.$notification.open({
+        type: 'error',
+        message: 'Sorry something went wrong !',
+        description : err.message
+      })
+      this.$auth.logout();
+    })
   }
 }
 </script>
 
 <style>
   .container {
-    margin: 0 auto;
-    min-height: 100vh;
-    display: flex;
-  }
-
-  .left-container {
+    height: 100vh;
     display: flex;
     flex: 1;
-    align-items: center;
-    justify-content: center;
-    background-color: #eeeff0;
-  }
-
-  .right-container {
-    background-image: url('../static/images/mask2.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .yellow-txt {
-    color: #34495e;
-  }
-
-  .orang-txt {
-    color: #34495e;
-  }
-
-  h1 {
-    font-size: 36px;
-    margin: 0;
+    width: 100vw;
   }
 
 </style>
