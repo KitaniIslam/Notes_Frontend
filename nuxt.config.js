@@ -40,7 +40,33 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
+  router: {
+    middleware: ['auth']
+  },
+  axios:{
+    baseURL: 'http://localhost:3001'
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/auth/login', method: 'post', propertyName: 'token' },
+          logout: { url: '/auth/logout', method: 'post' },
+          user: false
+        },
+        redirect: {
+          login: '/login',
+          logout: '/login',
+          home: '/'
+        },
+        tokenRequired: true,
+        tokenType: 'Bearer',
+      }
+    }
+  },
   /*
   ** Build configuration
   */
