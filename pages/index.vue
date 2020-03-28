@@ -1,18 +1,20 @@
 <template>
     <a-layout-content>
       <div class="container">
-        <h3>{{userEmail}}</h3>
+        <user-info-card :user="userEmail" class="info"/>
         <list :notes="userNotes"/>
       </div>
     </a-layout-content>
 </template>
 
 <script>
-import List from '~/components/List.vue'
+import List from '~/components/List.vue';
+import UserInfoCard from '~/components/UserInfoCard.vue';
 export default {
   middleware: 'auth',
   components: {
-    List
+    List,
+    UserInfoCard
   },
   data(){
     return {
@@ -51,6 +53,12 @@ export default {
     width: 70vw;
     margin: auto;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .info {
+    margin-bottom: 30px;
   }
 
 </style>
