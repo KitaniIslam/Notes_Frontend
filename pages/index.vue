@@ -1,7 +1,24 @@
 <template>
     <a-layout-content>
-      <div>
-        <h1>{{userEmail}}</h1>
+      <div class="container">
+        <h3>{{userEmail}}</h3>
+        <a-list :grid="{ gutter: 16, column: 2 }" :dataSource="userNotes">
+          <a-list-item slot="renderItem" slot-scope="item, index" >
+          <a-card >
+            <a-card-meta title="Note" :description="item.note">
+              <a-icon
+                slot="avatar"
+                :type="item.category.name === 'bug'?'bug':'check'"
+                :style="colorSelector(item.category.name)"
+              />
+            </a-card-meta>
+              <template class="ant-card-actions" slot="actions">
+                <a-icon type="delete" key="setting" />
+                <a-icon type="edit" key="edit" />
+              </template>
+          </a-card>
+          </a-list-item>
+        </a-list>
       </div>
     </a-layout-content>
 </template>
@@ -17,6 +34,14 @@ export default {
     }
   },
   methods:{
+    colorSelector(n){
+      const customStyle ={
+        'color': n === 'bug'?'red':'green',
+        'font-size': '30px' 
+      }
+      
+      return customStyle 
+    }
   },
   mounted(){
     // fetch user Data :
@@ -45,10 +70,9 @@ export default {
 
 <style>
   .container {
-    height: 100vh;
-    display: flex;
-    flex: 1;
-    width: 100vw;
+    width: 70vw;
+    margin: auto;
+    height: 100%;
   }
 
 </style>
