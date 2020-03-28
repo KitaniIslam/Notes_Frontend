@@ -5,7 +5,7 @@
       <a-radio-group v-model="filter">
         <a-list :grid="{ md: 2 ,gutter: 16}" :dataSource="cards">
           <a-list-item slot="renderItem" slot-scope="item,index">
-            <a-card :class="item.value" size='small' hoverable @click="filter=item.value">
+            <a-card :class="item.value" size='small' hoverable @click="onChange(item.value)">
               <a-radio :value="item.value"></a-radio>
               <a-statistic :title="item.value" :value="93">
                 <template v-slot:suffix>
@@ -22,14 +22,6 @@
 
 <script>
   export default {
-    props: {
-      user: {
-        type: String,
-        default: {
-          user: ''
-        }
-      }
-    },
     data() {
       return {
         cards: [{
@@ -45,7 +37,12 @@
         filter: 'All'
       }
     },
-    methods: {}
+    methods: {
+      onChange(e){
+        this.filter = e;
+        this.$store.commit('user/apllyFilter',{filter: e.toLowerCase()})
+      }
+    }
   }
 
 </script>

@@ -9,14 +9,11 @@
 <script>
 import NoteCard from '~/components/NoteCard.vue'
 export default {
-    props: {
-        notes: {
-            type: Array,
-            default: () => []
-        }
-    },
     components : {
         NoteCard
+    },
+    computed: {
+      notes(){ return this.$store.getters['user/getNotes']}   
     }
 }
 </script>

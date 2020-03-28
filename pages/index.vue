@@ -2,11 +2,11 @@
     <a-layout-content>
       <div class="hav-bg">
         <div class="container">
-          <user-info-card :user="userEmail" />
+          <user-info-card />
         </div>  
       </div>
       <div class="container">
-        <list :notes="userNotes" class="list"/>
+        <list class="list"/>
       </div>
     </a-layout-content>
 </template>
@@ -20,23 +20,15 @@ export default {
     List,
     UserInfoCard
   },
-  data(){
-    return {
-      resp: null,
-      userEmail: "",
-      userNotes: []
-    }
-  },
   mounted(){
     // fetch user Data :
     this.$axios.get('/auth/user')
     .then(res => {
-      this.userEmail = res.data.email;
-      this.userNotes = res.data.notes;
-
+      this.$store.commit('user/setUser',res.data);
+      
       this.$notification.open({
         type: 'success',
-        message: `Welcome back ${this.userEmail}`,
+        message: `Welcome back ${res.data.email}`,
         description: ''
       })
     })
