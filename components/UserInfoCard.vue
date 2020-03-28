@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="left-container"></div>
+    <div class="left-container">
+      <h1>You think, and we manage</h1>
+      <a-button theme="dark" icon="edit">Start Writing Now</a-button>
+    </div>
     <div class="right-container">
       <a-radio-group v-model="filter">
         <a-list :grid="{ md: 2 ,gutter: 16}" :dataSource="cards">
@@ -57,14 +60,16 @@
   .left-container {
     display: flex !important;
     flex: 1;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 10px;
   }
 
   .right-container {
     display: flex !important;
     flex: 1;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
   }
 

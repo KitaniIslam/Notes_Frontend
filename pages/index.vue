@@ -1,9 +1,7 @@
 <template>
     <a-layout-content>
-      <div class="hav-bg">
-        <div class="container">
+      <div class="hav-bg">  
           <user-info-card />
-        </div>  
       </div>
       <div class="container">
         <list class="list"/>
@@ -56,8 +54,8 @@ export default {
   .hav-bg {
     display: flex;
     align-items: center;
-    height: 60vh;
-    background-image: url('../assets/pictures/background.jpg');
+    height: 70vh;
+    background-image: url('../assets/pictures/background2.jpg');
     background-size: cover;
     background-position: center;
   }
