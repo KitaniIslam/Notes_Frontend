@@ -1,8 +1,12 @@
 <template>
     <a-layout-content>
+      <div class="hav-bg">
+        <div class="container">
+          <user-info-card :user="userEmail" />
+        </div>  
+      </div>
       <div class="container">
-        <user-info-card :user="userEmail" class="info"/>
-        <list :notes="userNotes"/>
+        <list :notes="userNotes" class="list"/>
       </div>
     </a-layout-content>
 </template>
@@ -48,7 +52,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .container {
     width: 70vw;
     margin: auto;
@@ -57,8 +61,17 @@ export default {
     flex-direction: column;
   }
 
-  .info {
-    margin-bottom: 30px;
+  .hav-bg {
+    display: flex;
+    align-items: center;
+    height: 60vh;
+    background-image: url('../assets/pictures/background.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .list {
+    margin-top: 40px;
   }
 
 </style>

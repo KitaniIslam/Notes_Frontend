@@ -12,16 +12,15 @@
 
 <script>
 import Login from '~/components/Login.vue'
-import Mode from '~/components/Mode'
 
 export default {
   components: {
-    Mode,Login
+    Login
   }
 }
 </script>
 
-<style>
+<style scoped>
   .container {
     margin: 0 auto;
     min-height: 100vh;
