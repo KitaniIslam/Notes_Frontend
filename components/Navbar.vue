@@ -1,38 +1,57 @@
 <template>
   <a-layout-header class="header">
     <div class="action">
-      <nuxt-link to="/">
-        <a-button type="link"><p>Home</p></a-button>
-      </nuxt-link>
       <nuxt-link to="/about">
-        <a-button type="link" disabled><p>About</p></a-button>
+        <a-button type="link">
+          <p>About</p>
+        </a-button>
       </nuxt-link>
-      <div class="logo" />
-      <a-button type="link" disabled=""><p>slmkitani</p></a-button>
-      <nuxt-link to="">
-      <a-button type="link"><p @click="logout()">Logout</p></a-button>
-
+      <nuxt-link to="/">
+        <div class="logo" />
       </nuxt-link>
+      <a-dropdown v-if="$auth.loggedIn" placement="bottomCenter">
+        <a-button type="link">
+          <p>{{userName}}</p>
+        </a-button>
+        <a-menu slot="overlay">
+          <a-menu-item @click="logout()">
+            <a>Logout</a>
+          </a-menu-item>
+        </a-menu>
+      </a-dropdown>
+      <a-button v-else type="link">
+        <p>Login</p>
+      </a-button>
     </div>
   </a-layout-header>
 </template>
 
 <script>
-export default {
-  methods: {
-    logout(){
-      this.$auth.logout();
-      this.$router.push('/login');
+  export default {
+    computed: {
+      userName() {
+        return this.$store.getters['user/getName']
+      }
+    },
+    methods: {
+      logout() {
+        this.$router.push('/logout');
+      }
     }
   }
-}
+
 </script>
 
 <style scoped>
   .header {
-    background-color: #CBC7C4;
+    background-color: #E4E7EE;
     display: flex;
     flex-direction: row;
+    z-index: 1;
+    width: 100% !important;
+    position: absolute !important;
+    opacity: 0.8;
+
   }
 
   .action {
@@ -40,7 +59,9 @@ export default {
     flex: 1;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
+
   p {
     margin: 0;
     color: #242425;
@@ -56,4 +77,5 @@ export default {
     background-size: cover;
     background-position: center;
   }
+
 </style>
