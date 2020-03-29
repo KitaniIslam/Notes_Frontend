@@ -6,7 +6,6 @@
     </a-card-meta>
     <template class="ant-card-actions" slot="actions">
       <a-icon type="delete" key="delete" @click="showConfirm()" />
-
       <a-icon type="edit" key="edit" @click="showModal" />
     </template>
     <a-modal title="Edit Note" v-model="visible">
@@ -17,6 +16,13 @@
         </a-button>
       </template>
       <a-textarea v-model="newNote" />
+    </a-modal>
+    <a-modal title="Delete Note" v-model="deleteVisible">
+      <template slot="footer">
+        <a-button key="back" @click="handleOk">Cancel</a-button>
+        <a-button type="danger" @click="deletePost">Delete</a-button>
+      </template>
+      <p>Are you sure you want to delete this Note ?</p>
     </a-modal>
   </a-card>
 </template>
@@ -37,6 +43,7 @@
     data() {
       return {
         visible: false,
+        deleteVisible: false,
         newNote: this.simple.note
       }
     },
@@ -57,17 +64,29 @@
       toUperCase(t) {
         return t.toUpperCase();
       },
+      deletePost(){
+        this.$axios.delete('/api/note',{
+          params : {
+            id: this.simple.id
+          }
+        })
+        .then(res => {
+          this.deleteVisible= false;
+          this.$notification.open({
+            type: 'success',
+            message: 'Note added successfully !'
+          })
+        })
+        .catch(err =>{
+
+          this.$notification.open({
+            type: 'error',
+            message: 'Something went wrong ! please try again'
+          })
+        })
+      },
       showConfirm() {
-        this.$confirm({
-          title: 'Do you want to delete these Note?',
-          onOk() {
-            return new Promise((resolve, reject) => {
-                setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-              })
-              .catch(() => console.log('Oops errors!'));
-          },
-          onCancel() {},
-        });
+        this.deleteVisible = true;
       }
     }
   }
