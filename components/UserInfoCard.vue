@@ -67,7 +67,7 @@ import NewNote from '~/components/NewNote.vue'
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 10px 64px 10px 10px;
   }
 
   .right-container {
@@ -75,6 +75,7 @@ import NewNote from '~/components/NewNote.vue'
     flex: 1;
     justify-content: center;
     align-items: center;
+    padding-top: 64px;
   }
 
   h3 {

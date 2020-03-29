@@ -55,7 +55,7 @@ export default {
   .hav-bg {
     display: flex;
     align-items: center;
-    height: 70vh;
+    height: 80vh;
     background-image: url('../assets/pictures/background2.jpg');
     background-size: cover;
     background-position: center;
