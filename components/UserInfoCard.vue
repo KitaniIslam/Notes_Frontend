@@ -2,7 +2,7 @@
   <div class="container">
     <div class="left-container">
       <h1>You think, and we manage</h1>
-      <a-button theme="dark" icon="edit">Start Writing Now</a-button>
+      <new-note />
     </div>
     <div class="right-container">
       <a-radio-group v-model="filter">
@@ -24,7 +24,11 @@
 </template>
 
 <script>
+import NewNote from '~/components/NewNote.vue'
   export default {
+    components:{
+      NewNote
+    },
     data() {
       return {
         cards: [{
