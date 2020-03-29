@@ -16,7 +16,7 @@ function getName(row) {
   export const mutations = {
     setUser(state, payload) {
       state.user.email = payload.email;
-      state.notes = payload.notes;
+      state.notes = payload.notes.reverse();
       state.dataToRender = payload.notes;
       state.user.name = getName(payload.email);
     },
