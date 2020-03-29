@@ -13,6 +13,7 @@
 <script>
 import List from '~/components/List.vue';
 import UserInfoCard from '~/components/UserInfoCard.vue';
+
 export default {
   middleware: 'auth',
   components: {
@@ -20,24 +21,29 @@ export default {
     UserInfoCard
   },
   mounted(){
-    // fetch user Data :
     this.$axios.get('/auth/user')
     .then(res => {
       this.$store.commit('user/setUser',res.data);
       
       this.$notification.open({
         type: 'success',
-        message: `Welcome back ${res.data.email}`,
+        message: `Welcome ${res.data.email}`,
         description: ''
       })
     })
     .catch(err => {
+      const message = 'Something went wrong !';
+      const description = `${err.message} Pleas try again or reload page.`;
+      if(err.response.status === 401){
+        this.$router.push('/logout');
+        message= 'Session expired';
+        description= 'Please Login !';
+      }
       this.$notification.open({
         type: 'error',
-        message: 'Sorry something went wrong !',
-        description : err.message
+        message: message,
+        description : description
       })
-      this.$auth.logout();
     })
   }
 }
