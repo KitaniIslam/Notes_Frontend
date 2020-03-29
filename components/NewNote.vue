@@ -1,46 +1,23 @@
 <template>
   <div>
-    <a-button type="primary" @click="showDrawer" icon="edit">Start Writing Now</a-button>
-    <a-drawer title="Create a new note" :width="720" @close="onClose" :visible="visible"
-      :bodyStyle="{paddingBottom: '80px'}">
-      <a-form :form="form" layout="vertical" hideRequiredMark>
-        <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item label="Type">
-              <a-select defaultValue="fix" style="width: 120px" @change="handleChange">
-                <a-select-option value="fix">Fix</a-select-option>
-                <a-select-option value="bug">Bug</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="24">
-            <a-form-item label="Description">
-              <a-textarea v-decorator="['description', {
-                  rules: [{ required: true, message: 'Please enter note description' }]
-                }]" :rows="4" placeholder="please enter note description" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-      </a-form>
-      <div :style="{
-          position: 'absolute',
-          right: 0,
-          bottom: 0,
-          width: '100%',
-          borderTop: '1px solid #e9e9e9',
-          padding: '10px 16px',
-          background: '#fff',
-          textAlign: 'right',
-          zIndex: 1,
-        }">
-        <a-button :style="{marginRight: '8px'}" @click="onClose">
-          Cancel
+    <a-button type="primary" @click="showModal" icon="edit">Start Writing Now</a-button>
+    <a-modal title="Edit Note" v-model="visible">
+      <template slot="footer">
+        <a-button key="back" @click="handleCancel">Cancel</a-button>
+        <a-button key="submit" type="primary" @click="handleOk">
+          Submit
         </a-button>
-        <a-button @click="onClose" type="primary">Submit</a-button>
-      </div>
-    </a-drawer>
+      </template>
+      <a-form-item label="Category">
+        <a-select :defaultValue="category" style="width: 120px" @change="handleChange">
+          <a-select-option value="fix">Fix</a-select-option>
+          <a-select-option value="bug">Bug</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="Description">
+        <a-textarea v-model="newNote" clearable />
+      </a-form-item>
+    </a-modal>
   </div>
 </template>
 
@@ -50,15 +27,56 @@
       return {
         form: this.$form.createForm(this),
         visible: false,
+        category: 'fix',
+        newNote:''
       };
     },
     methods: {
-      showDrawer() {
+      showModal() {
         this.visible = true;
       },
-      onClose() {
+      noteIsNotValidate(str){
+        return (!str || str.length === 0 || /^\s*$/.test(str))
+      },
+      handleOk() {
+        this.visible = false;
+        const load = this.$message;
+
+        if(this.noteIsNotValidate(this.newNote)){
+          this.$notification.open({
+            type: 'error',
+            message: `Submition not complete`,
+            description: 'Note is required you cant submit an empty note'
+          })
+        }else {
+          load.loading('Action in progress..',1);
+          this.$axios.post('/api/note',{
+            category: this.category,
+              note: (this.newNote).replace(/^\s+/g, '')
+          })
+          .then(res => {
+            this.$notification.open({
+              type: 'success',
+              message: `Submition complete`,
+              description: 'Note added successfully'
+            })
+            this.newNote= '';
+          })
+          .catch(err => {
+            this.$notification.open({
+              type: 'error',
+              message: `Something went wrong`,
+              description: `${err.message} please try again,still not working Reload the page !`
+            })
+          })
+        }
+      },
+      handleCancel() {
         this.visible = false;
       },
+      handleChange(e){
+        this.category= e;
+      }
     },
   };
 
