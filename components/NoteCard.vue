@@ -51,6 +51,16 @@
       showModal() {
         this.visible = true;
       },
+      syncUserData(){
+        this.$axios.get('/auth/user')
+        .then(res => {
+          this.$store.commit('user/setUser',res.data);
+          this.$forceUpdate();
+      })
+        .catch(err => {
+          console.log(err)
+        })
+      },
       handleSubmiteChanges() {
         console.log(`id ${this.simple.id} and note ${this.newNote}`)
         this.$axios.patch('/api/note', {
@@ -64,6 +74,7 @@
             type: 'success',
             message: res.data.message
           })
+          this.syncUserData();
         })
         .catch(err => {
           this.$notification.open({
@@ -94,6 +105,7 @@
             type: 'success',
             message: 'Deleted successfully !'
           })
+          this.syncUserData();
         })
         .catch(err =>{
 
