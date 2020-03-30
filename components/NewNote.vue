@@ -60,6 +60,7 @@
               message: `Submition complete`,
               description: 'Note added successfully'
             })
+            this.syncUserData();
             this.newNote= '';
           })
           .catch(err => {
@@ -76,7 +77,23 @@
       },
       handleChange(e){
         this.category= e;
+      },
+      syncUserData(){
+        this.$axios.get('/auth/user')
+        .then(res => {
+          // keep the old filter
+          const filter = this.$store.getters['user/getCurrentFilter'];
+          // set new data after delete/update
+          this.$store.commit('user/setUser',res.data);
+          // set the old filter after delete/update
+          this.$store.commit('user/apllyFilter',{filter});
+          this.$forceUpdate();
+      })
+        .catch(err => {
+          console.log(err)
+        })
       }
+
     },
   };
 
