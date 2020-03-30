@@ -1,55 +1,113 @@
 <template>
-<div class="container">
-  <a-card :title="buttonTxt" :bordered="true" style="width: 300px" hoverable>
-    <a-input-group>
-      <a-input placeholder="User name" v-model="userName" ref="userNameInput">
-        <a-icon slot="prefix" type="user" />
-        <a-tooltip slot="suffix" title="You can use your phone number">
-          <a-icon type="info-circle" />
-        </a-tooltip>
+<a-card :title="buttonTxt" :bordered="true" style="width: 300px" hoverable>
+  <a-form
+    id="components-form-demo-normal-login"
+    :form="form"
+    class="login-form container"
+    @submit="handleSubmit"
+  >
+    <a-form-item>
+      <a-input
+        v-decorator="[
+          'userName',
+          { rules: [{ required: true, message: 'Please input your username!' }], },
+        ]"
+        placeholder="Email"
+      >
+        <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
       </a-input>
-      <a-input-password class="password" placeholder="Password" v-model="password">
-        <a-icon slot="prefix" type="lock" />
-      </a-input-password>
-      <a-input-password v-if="!haveAccount" class="password" placeholder="Repeate Password" v-model="password">
-        <a-icon slot="prefix" type="lock" />
-      </a-input-password>
-    </a-input-group>
-
-    <a-button class="login-button" block @click="login()">{{buttonTxt}}</a-button>
-    <div class="btn-action">
-      <a-button type="link" @click="register()">{{btnAction}}</a-button>
-    </div>
+    </a-form-item>
+    <a-form-item >
+      <a-input
+        v-decorator="[
+          'password',
+          { rules: [{ required: true, message: 'Please input your Password!' },
+          {validator: validateToNextPassword}] },
+        ]"
+        type="password"
+        placeholder="Password"
+      >
+        <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)" />
+      </a-input>
+    </a-form-item>
+    <a-form-item v-if="!haveAccount">
+      <a-input
+        v-decorator="[
+          'newpassword',
+          { rules: [
+                { required: true, message: 'Please input your Password!' },
+                {validator: compareToFirstPassword}
+            ] },
+        ]"
+        type="password"
+        @blur="handleConfirmBlur"
+        placeholder="Repeate Password"
+      >
+        <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)" />
+      </a-input>
+    </a-form-item>
+    <a-form-item>
+      <a-button type="primary" html-type="submit" class="login-form-button">
+        {{buttonTxt}}
+      </a-button>
+      Or
+      <a @click="registerMode">
+        {{btnAction}}
+      </a>
+    </a-form-item>
+  </a-form>
   </a-card>
-</div>
 </template>
 
 <script>
-  export default {
-    name: 'login',
-    data() {
+export default {
+  beforeCreate() {
+    this.form = this.$form.createForm(this, { name: 'normal_login' });
+  },
+  data(){
       return {
-        haveAccount: true,
-        userName: "slmkitani@gmail.com",
-        password: "x123456789",
-        confermedPassword : "",
         buttonTxt : "Login",
-        btnAction: "Register",
-        value: 'a',
+        haveAccount: true ,
+        btnAction: 'Register'
+      }
+  },
+  methods: {
+    validateToNextPassword(rule, value, callback) {
+      const form = this.form;
+    //   if(this.haveAccount){callback()}
+      if (value && this.confirmDirty) {
+        form.validateFields(['confirm'], { force: true });
+      }
+      callback();
+    },
+    compareToFirstPassword(rule, value, callback) {
+      const form = this.form;
+      if (value && value !== form.getFieldValue('password')) {
+        callback('Two passwords that you enter is inconsistent!');
+      } else {
+        callback();
       }
     },
-    methods: {
-      login() {
-        this.$auth.loginWith('local', { data: {
-          email: this.userName,
-          password: this.password
-        } })
-        this.$notification.open({
-            message: `${this.buttonTxt}`,
-            type:"success"
-          })
-      },
-      register(){
+    handleConfirmBlur(e) {
+      const value = e.target.value;
+      this.confirmDirty = this.confirmDirty || !!value;
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+            const crid = {email:values.userName, password: values.password}
+            console.log(`account : ${this.haveAccount}`)
+            if(this.haveAccount){
+                this.login(crid)
+            }else{
+                console.log('im signup')
+                this.signup(crid);
+            }
+        }
+      });
+    },
+    registerMode(){
         
         if(this.haveAccount){
           this.haveAccount = false;
@@ -60,37 +118,53 @@
           this.buttonTxt = "Login";
           this.btnAction = "Register"
         }
-      }
+    },
+    login(crid){
+        console.log(crid)
+        this.$auth.loginWith('local', { data: crid })
+        .then(res => {
+            this.$notification.open({
+                message: `${this.buttonTxt}`,
+                type:"success"})
+        })
+        .catch(err=> {
+            this.$notification.open({
+                message: 'Email or Password incorrect !',
+                type:'error'})
+            }
+        )
+    },
+    signup(crid){
+        console.log('scoop of signup')
+        this.$axios.post('/auth/signup',crid)
+        .then(res => {
+            this.login(crid);
+        })
+        .catch(err => {
+            this.$notification.open({
+                message: 'Something went wrong',
+                type:'error'})
+        })
     }
-  }
-
+    },
+};
 </script>
-
-<style scoped>
-  .container {
+<style>
+.container {
     display: flex;
-    flex: 1;
     align-items: center;
     justify-content: center;
-    background-color: #eeeff0;
-  }
-  .login-button {
-    background-color: #34495e;
-    color: white;
-    margin-top: 20px;
+    /* background-color: #eeeff0; */
+    flex-direction: column;
   }
 
-  .password {
-    margin-top: 20px;
-    /* margin-bottom: 20px; */
-  }
-
-  .btn-action {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
-    margin-top: 5px;
-    color: #34495e;
-  }
-
+#components-form-demo-normal-login .login-form {
+  max-width: 300px;
+}
+#components-form-demo-normal-login .login-form-forgot {
+  float: right;
+}
+#components-form-demo-normal-login .login-form-button {
+  width: 100%;
+}
 </style>
