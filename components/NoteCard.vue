@@ -10,8 +10,8 @@
     </template>
     <a-modal title="Edit Note" v-model="visible">
       <template slot="footer">
-        <a-button key="back" @click="handleOk">Cancel</a-button>
-        <a-button key="submit" type="primary" @click="handleOk">
+        <a-button key="back" @click="visible=false">Cancel</a-button>
+        <a-button key="submit" type="primary" @click="handleSubmiteChanges">
           Submit
         </a-button>
       </template>
@@ -51,9 +51,27 @@
       showModal() {
         this.visible = true;
       },
-      handleOk(e) {
-        console.log(e);
-        this.visible = false;
+      handleSubmiteChanges() {
+        console.log(`id ${this.simple.id} and note ${this.newNote}`)
+        this.$axios.patch('/api/note', {
+            id : 25,
+            note: this.newNote
+          }
+        )
+        .then(res => {
+          this.visible = false;
+          this.$notification.open({
+            type: 'success',
+            message: res.data.message
+          })
+        })
+        .catch(err => {
+          this.$notification.open({
+            type: 'error',
+            message: 'Ops something went wrong ',
+            discreption: err.message
+          })
+        })
       },
       colorSelector(n) {
         return {
