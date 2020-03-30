@@ -1,5 +1,5 @@
-# corona_fighters
-
+# Notes
+<!-- TODO: -->
 > My polished Nuxt.js project
 
 ## Build Setup
@@ -18,5 +18,3 @@ $ npm run start
 # generate static project
 $ npm run generate
 ```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
