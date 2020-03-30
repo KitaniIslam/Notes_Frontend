@@ -19,6 +19,7 @@ function getName(row) {
       state.notes = payload.notes.reverse();
       state.dataToRender = payload.notes;
       state.user.name = getName(payload.email);
+      state.filter = 'all'
     },
     apllyFilter(state, payload) {
       if (payload.filter == 'all') {
@@ -28,6 +29,7 @@ function getName(row) {
           return item.category.name == payload.filter;
         });
       }
+      state.filter = payload.filter;
     }
   };
   

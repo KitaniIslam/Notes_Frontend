@@ -32,27 +32,27 @@ import NewNote from '~/components/NewNote.vue'
     computed: {
       bugs(){return this.$store.getters['user/getBugCount']},
       fixs(){return this.$store.getters['user/getFixCount']},
+      filter(){return this.$store.getters['user/getCurrentFilter']},
       counter(){return [this.bugs+this.fixs,this.fixs,this.bugs]}
     },
     data() {
       return {
         cards: [{
-            value: 'All'
+            value: 'all'
           },
           {
-            value: 'Fix'
+            value: 'fix'
           },
           {
-            value: 'Bug'
+            value: 'bug'
           }
-        ],
-        filter: 'All'
+        ]
       }
     },
     methods: {
       onChange(e){
         this.filter = e;
-        this.$store.commit('user/apllyFilter',{filter: e.toLowerCase()})
+        this.$store.commit('user/apllyFilter',{filter: e})
       }
     }
   }
@@ -92,19 +92,19 @@ import NewNote from '~/components/NewNote.vue'
     padding: 0;
   }
 
-  .Fix {
+  .fix {
     background-color: #2ecc71;
   }
 
-  .Bug {
+  .bug {
     background-color: #e74c3c;
     }
 
-  .Fix .ant-statistic {
+  .fix .ant-statistic {
       color : white;
   }
 
-  .Bug .ant-statistic {
+  .bug .ant-statistic {
       color : white;
   }
 </style>
