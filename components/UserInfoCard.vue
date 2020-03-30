@@ -10,9 +10,9 @@
           <a-list-item slot="renderItem" slot-scope="item,index">
             <a-card :class="item.value" size='small' hoverable @click="onChange(item.value)">
               <a-radio :value="item.value"></a-radio>
-              <a-statistic :title="item.value" :value="93">
+              <a-statistic :title="item.value" :value="counter[index]">
                 <template v-slot:suffix>
-                  <span> / 100</span>
+                  <span> / {{bugs+fixs}}</span>
                 </template>
               </a-statistic>
             </a-card>
@@ -28,6 +28,11 @@ import NewNote from '~/components/NewNote.vue'
   export default {
     components:{
       NewNote
+    },
+    computed: {
+      bugs(){return this.$store.getters['user/getBugCount']},
+      fixs(){return this.$store.getters['user/getFixCount']},
+      counter(){return [this.bugs+this.fixs,this.fixs,this.bugs]}
     },
     data() {
       return {

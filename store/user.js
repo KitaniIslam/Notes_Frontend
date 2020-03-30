@@ -32,6 +32,12 @@ function getName(row) {
   };
   
   export const getters = {
+    getBugCount(state) {
+      return state.notes.filter(item => item.category.name === 'bug').length; 
+    },
+    getFixCount(state) {
+      return state.notes.filter(item => item.category.name === 'fix').length; 
+    },
     getNotes (state) {
       return state.dataToRender;
     },
