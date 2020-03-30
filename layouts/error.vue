@@ -1,17 +1,22 @@
 <template>
 <div class="container">
-  <img src="~/assets/SVG/_404.svg" class="logo" alt="">
-  <h1>Page not found</h1>
-  <nuxt-link to="/">
-    <a-button>Go Back Home</a-button>
-  </nuxt-link>
+  <div v-if="error.statusCode === 404" class="center">
+    <img src="~/assets/SVG/_404.svg" class="logo" alt="">
+    <h1>Page not found</h1>
+    <nuxt-link to="/">
+      <a-button>Go Back Home</a-button>
+    </nuxt-link>
+  </div>
+  <div v-else class="center">
+    <img src="~/assets/SVG/error.svg" class="logo" alt="">
+    <h1>Ops something is broken</h1>
+  </div>
 </div>
 </template>
 
 <script>
   export default {
-    // you can set a custom layout for the error page
-
+    props: ['error'],
     data() {
       return {};
     },
@@ -33,6 +38,12 @@
 
   .logo {
     width: 300px;
+  }
+
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
 </style>
