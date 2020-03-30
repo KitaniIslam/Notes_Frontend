@@ -19,7 +19,7 @@
     </a-modal>
     <a-modal title="Delete Note" v-model="deleteVisible">
       <template slot="footer">
-        <a-button key="back" @click="handleOk">Cancel</a-button>
+        <a-button key="back" @click="deleteVisible= false">Cancel</a-button>
         <a-button type="danger" @click="deletePost">Delete</a-button>
       </template>
       <p>Are you sure you want to delete this Note ?</p>
@@ -74,7 +74,7 @@
           this.deleteVisible= false;
           this.$notification.open({
             type: 'success',
-            message: 'Note added successfully !'
+            message: 'Deleted successfully !'
           })
         })
         .catch(err =>{
