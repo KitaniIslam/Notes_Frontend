@@ -54,7 +54,7 @@
       handleSubmiteChanges() {
         console.log(`id ${this.simple.id} and note ${this.newNote}`)
         this.$axios.patch('/api/note', {
-            id : 25,
+            id : this.simple.id,
             note: this.newNote
           }
         )
